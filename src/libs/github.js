@@ -89,7 +89,7 @@ export async function listIssues () {
         el.labels.forEach((l) => {
           labels.push(l.name)
         })
-        
+
         // 将数据存入变量 issues
         issues.push({
           title: el.title,
