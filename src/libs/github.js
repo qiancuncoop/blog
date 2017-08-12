@@ -30,13 +30,13 @@
 import wepy from 'wepy'
 import moment from 'moment'
 
-const accessToken = '7d0888fd5c1c386610f7306707fb3638d944dcee'
+const accessToken = 'dded15888fdaf29f887556868970d784447bbd7e'
 const BaseURL = 'https://api.github.com'
 
 const Github = {
-  Issues: `/repos/fengyfei/blog/issues?access_token=${accessToken}&state=open&creator=fengyfei`,
-  Index: `/repos/fengyfei/blog/issues/2?access_token=${accessToken}`,
-  Mine: `/repos/fengyfei/blog/issues/5?access_token=${accessToken}`,
+  Issues: `/repos/DoubleWoodH/blog/issues?access_token=${accessToken}&state=open&creator=DoubleWoodH`,
+  Index: `/repos/DoubleWoodH/blog/issues/3?access_token=${accessToken}`,
+  Mine: `/repos/DoubleWoodH/blog/issues/5?access_token=${accessToken}`,
   Popular: `/search/repositories?access_token=${accessToken}`
 }
 
