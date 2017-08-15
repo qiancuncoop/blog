@@ -46,7 +46,6 @@ export async function mapIssues () {
     let resp = await wepy.request({url: BaseURL + Github.Index})
 
     if (resp.statusCode === 200) {
-      let images = []
       let last = ''
       let images = []
       let mapImage = []
