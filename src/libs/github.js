@@ -34,7 +34,7 @@ const accessToken = 'dded15888fdaf29f887556868970d784447bbd7e'
 const BaseURL = 'https://api.github.com'
 
 const Github = {
-  Issues: `/repos/DoubleWoodH/blog/issues?access_token=${accessToken}&state=open&creator=DoubleWoodH`,
+  Issues: `/repos/DoubleWoodH/blog/issues?access_token=${accessToken}&state=open&creator=DoubleWoodH&page=`,
   Index: `/repos/DoubleWoodH/blog/issues/3?access_token=${accessToken}`,
   Mine: `/repos/DoubleWoodH/blog/issues/5?access_token=${accessToken}`,
   Popular: `/search/repositories?access_token=${accessToken}`
@@ -90,11 +90,11 @@ export async function mapIssues () {
 // 获取 issues 列表
 export async function listIssues () {
   try {
-    let resp = await wepy.request({url: BaseURL + Github.Issues})
+    let page = 1
+    let issues = []
+    let resp = await wepy.request({url: BaseURL + Github.Issues + 1})
 
-    if (resp.statusCode === 200) {
-      let issues = []
-
+    while (resp.statusCode === 200 && resp.data.length !== 0) {
       resp.data.forEach((el) => {
         let labels = []
 
@@ -113,10 +113,11 @@ export async function listIssues () {
         })
       })
 
-      return [issues, 0]
+      page += 1
+      resp = await wepy.request({url: BaseURL + Github.Issues + page})
     }
 
-    return [[], 1]
+    return [issues, 0]
   } catch (e) {
     console.log(e)
 
