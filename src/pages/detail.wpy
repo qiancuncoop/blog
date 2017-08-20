@@ -39,8 +39,8 @@
     <view class="topBorder"></view>
     <import src="../libs/wemark/wemark.wxml"/>
     <view class="content">
-    <template is="wemark" data="{{...data}}"></template>
-  </view>
+      <template is="wemark" data="{{...data}}"></template>
+    </view>
   </view>
 </template>
 
