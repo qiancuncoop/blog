@@ -67,17 +67,17 @@ export default class extends wepy.app {
         pagePath: 'pages/index',
         iconPath: 'images/home.png',
         selectedIconPath: 'images/home_active.png',
-        text: '主页'
+        text: '新鲜事'
       }, {
         pagePath: 'pages/github',
         iconPath: 'images/github.png',
         selectedIconPath: 'images/github_active.png',
-        text: '全部'
+        text: '便民'
       }, {
         pagePath: 'pages/mine',
         iconPath: 'images/mine.png',
         selectedIconPath: 'images/mine_active.png',
-        text: '我'
+        text: '关于'
       }]
     }
   }

@@ -63,18 +63,12 @@
 </style>
 
 <template>
-  <view class="item">
+  <view class="item" @tap="tap">
     <view style="width: {{windowWidth - 38}}px;" class="itemBottom">
-      <text class="title">{{message.name}}</text>
-    </view>
-    <view class="itemBottom" style="width: {{windowWidth - 38}}px;">
-			<text class="desc">{{message.description}}</text>
+      <text class="title">{{message.title}}</text>
     </view>
     <view style="width: {{windowWidth - 38}}px;" class="itemBottom">
-      <text class="subTitle">{{message.language}}</text>
-      <text class="subTitle separate">{{separate}}</text>
-      <text class="subTitle">{{message.stargazers_count}}</text>
-      <text class="subTitle starLabel">{{starLabel}}</text>
+      <text class="subTitle">{{message.created}}</text>
     </view>
   </view>
 </template>
@@ -91,6 +85,12 @@
     props = {
       message: Object,
       width: Number
+    }
+
+    methods = {
+      tap() {
+        this.$emit('childFn')
+      }
     }
   }
 </script>

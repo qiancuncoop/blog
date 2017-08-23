@@ -54,7 +54,7 @@
     <view class="topBorder"></view>
     <view class="page" wx:if="{{status === 0}}">
       <repeat for="{{message}}" key="index" index="index" item="item">
-        <abstract :message="item" :image="images[index]" :width="windowWidth" @childFn.user="onShowDetail" />
+        <abstract :message="item" :image="images[index]" :width="windowWidth" @childFunc.user="onShowDetail" />
       </repeat>
     </view>
     <view
@@ -85,7 +85,7 @@
 
   export default class Index extends wepy.page {
     config = {
-      navigationBarTitleText: '博客'
+      navigationBarTitleText: '农在指间传媒'
     }
 
     components = {
@@ -134,7 +134,7 @@
         })
 
         // 重新获取数据
-        let data = await listIssues()
+        let data = await listIssues('home')
 
         self.message = data[0]
         self.status = data[1]
@@ -165,7 +165,7 @@
       })
 
       let windowSize = getWindowSize()
-      let issues = await listIssues()
+      let issues = await listIssues('home')
 
       self.windowWidth = windowSize.windowWidth
       self.windowHeight = windowSize.windowHeight
@@ -205,7 +205,7 @@
             mask: true
           })
 
-          let issues = await listIssues()
+          let issues = await listIssues('home')
 
           self.message = issues[0]
           self.status = issues[1]

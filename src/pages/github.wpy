@@ -104,7 +104,7 @@
       </view>
       <view class="page">
         <repeat for="{{popular}}" key="index" index="index" item="item">
-          <popular :message="item" :width="windowWidth" />
+          <popular :message="item" :width="windowWidth" @childFn.user="onShowDetail" />
         </repeat>
       </view>
     </view>
@@ -131,7 +131,7 @@
 <script>
   import wepy from 'wepy'
   import Popular from '../components/popular'
-  import { getPopular } from '../libs/github'
+  import { listIssues } from '../libs/github'
 
   export default class GitHub extends wepy.page {
     data = {
@@ -140,16 +140,16 @@
       popular: [],
       networkFail: '网络请求失败',
       tapToReload: '请轻触屏幕重新加载',
-      tab: ['go', 'javascript', 'erlang', 'lua', 'swift'],
-      color: ['#375eab', '#f1e05a', '#b83998', '#000080', '#ffac45'],
-      language: 'go',
+      tab: ['招聘求职', '二手信息', '房屋租售', '寻人找物'],
+      color: ['#375eab', '#f1e05a', '#b83998', '#ffac45'],
+      label: 'qiuzhi',
       page: 1,
       status: 0,
       currentTargetId: 0
     }
 
     config = {
-      navigationBarTitleText: 'GitHub'
+      navigationBarTitleText: '便民信息'
     }
 
     components = {
@@ -167,7 +167,7 @@
         })
 
         // 重新获取数据
-        let data = await getPopular(self.language, 1)
+        let data = await listIssues(self.label)
 
         self.popular = data[0]
         self.status = data[1]
@@ -189,6 +189,7 @@
       },
 
       async onChoose(e) {
+        const labels = ['qiuzhi', 'ershou', 'zushou', 'xunren']
         let self = this
 
         wepy.showLoading({
@@ -198,10 +199,10 @@
 
         let id = Number(e.currentTarget.id)
 
-        self.language = self.tab[id]
+        self.label = self.tab[id]
         self.currentTargetId = id
 
-        let data = await getPopular(self.language, 1)
+        let data = await listIssues(labels[id])
 
         self.popular = data[0]
         self.status = data[1]
@@ -220,6 +221,20 @@
         }
 
         this.$apply()
+      },
+
+      onShowDetail(e) {
+        let self = this
+        try {
+          wepy.setStorageSync('body', self.popular[e.source.$index].body)
+          wepy.setStorageSync('title', self.popular[e.source.$index].title)
+        } catch (e) {
+        }
+
+        // 跳转到详情页
+        wepy.navigateTo({
+          url: './detail'
+        })
       }
     }
 
@@ -246,7 +261,7 @@
         })
       }
 
-      let data = await getPopular(self.language, 1)
+      let data = await listIssues(self.label)
 
       self.popular = data[0]
       self.status = data[1]
@@ -261,47 +276,6 @@
           image: '../images/fail.png',
           duration: 1500
         })
-      }
-
-      this.$apply()
-    }
-
-    async onReachBottom() {
-      let self = this
-
-      if (!self.status) {
-        if (self.page === 1) {
-          wepy.showLoading({
-            title: '正在加载...',
-            mask: true
-          })
-
-          self.page += 1
-
-          let data = await getPopular(self.language, 2)
-
-          self.popular = self.popular.concat(data[0])
-          self.status = data[1]
-
-          if (self.status === 0) {
-            await wepy.hideLoading()
-          } else {
-            await wepy.hideLoading()
-            await wepy.showToast({
-              title: '加载失败!',
-              mask: true,
-              image: '../images/fail.png',
-              duration: 1500
-            })
-          }
-        } else {
-          await wepy.showToast({
-            title: '就先这样吧!',
-            mask: true,
-            image: '../images/fail.png',
-            duration: 1500
-          })
-        }
       }
 
       this.$apply()

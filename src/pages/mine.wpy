@@ -29,7 +29,7 @@
 
 <style lang="less">
   .content {
-    padding: 0 20px;
+    padding: 100px 20px;
   }
   .userCard {
     display: flex;
@@ -70,13 +70,6 @@
   <view>
     <view class="topBorder"></view>
     <view class="content" style="height: {{windowHeight}}px;">
-      <view class="userCard">
-        <image
-          class="avatar"
-          src="{{userInfo.avatar}}">
-        </image>
-        <text class="name">{{userInfo.nickName}}</text>
-      </view>
       <view
         wx:for="{{label}}"
         wx:key="index"
@@ -104,36 +97,26 @@
     data = {
       windowWidth: 0,
       windowHeight: 0,
-      userInfo: null,
-      label: ['博客', 'Github', 'Email']
+      label: ['公司介绍', '团队介绍'],
+      data: []
     }
 
     methods = {
       // 点击选项
       labelTap(e) {
         let self = this
-        let item = ''
         let id = e.currentTarget.id
 
-        item = self.userInfo.contact[Number(id)]
+        try {
+          wepy.setStorageSync('body', self.data[id].body)
+          wepy.setStorageSync('title', self.data[id].title)
+        } catch (e) {
+        }
 
-        // 弹起 Action Sheet
-        wepy.showActionSheet({
-          itemList: [item]
-        }).then(function() {
-          // 点击列表项即可复制
-          wx.setClipboardData({
-            data: item,
-            success: function(res) {
-              wepy.showToast({
-                icon: 'success',
-                mask: 'true',
-                title: '复制成功',
-                duration: 2000
-              })
-            }
-          })
-        }).catch(() => {})
+        // 跳转到详情页
+        wepy.navigateTo({
+          url: './detail'
+        })
       }
     }
 
@@ -161,9 +144,7 @@
     async onShow() {
       let self = this
 
-      let userInfo = await mine()
-
-      self.userInfo = userInfo
+      self.data = await mine()
 
       this.$apply()
     }

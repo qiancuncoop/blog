@@ -30,14 +30,13 @@
 import wepy from 'wepy'
 import moment from 'moment'
 
-const accessToken = 'dded15888fdaf29f887556868970d784447bbd7e'
+const accessToken = '66e7bc29a933840c8e81f09e55106848dd6ca38c'
 const BaseURL = 'https://api.github.com'
 
 const Github = {
-  Issues: `/repos/DoubleWoodH/blog/issues?access_token=${accessToken}&state=open&creator=DoubleWoodH&page=`,
-  Index: `/repos/DoubleWoodH/blog/issues/3?access_token=${accessToken}`,
-  Mine: `/repos/DoubleWoodH/blog/issues/5?access_token=${accessToken}`,
-  Popular: `/search/repositories?access_token=${accessToken}`
+  Article: `/repos/qiancuncoop/blog/issues?access_token=${accessToken}&author=qiancuncoop`,
+  Index: `/repos/qiancuncoop/blog/issues/4?access_token=${accessToken}`,
+  Mine: `/repos/qiancuncoop/blog/issues?state=closed&access_token=${accessToken}`
 }
 
 // 获取 issues 对应的图片
@@ -56,7 +55,7 @@ export async function mapIssues () {
       last = data.last
       mapImage = data.map
 
-      let issues = (await listIssues())[0]
+      let issues = (await listIssues('home'))[0]
 
       for (let i = 0; i < issues.length; i++) {
         for (let j = 0; j < mapImage.length; j++) {
@@ -88,33 +87,25 @@ export async function mapIssues () {
 }
 
 // 获取 issues 列表
-export async function listIssues () {
+export async function listIssues (tab) {
   try {
     let page = 1
     let issues = []
-    let resp = await wepy.request({url: BaseURL + Github.Issues + 1})
+    let resp = await wepy.request({url: BaseURL + Github.Article + '&labels=' + tab + '&page=' + page})
 
     while (resp.statusCode === 200 && resp.data.length !== 0) {
       resp.data.forEach((el) => {
-        let labels = []
-
-        el.labels.forEach((l) => {
-          labels.push(l.name)
-        })
-
         // 将数据存入变量 issues
         issues.push({
           title: el.title,
           number: el.number,
           created: moment(el.created_at).format('YYYY-MM-DD HH:mm:ss'),
-          labels: (labels.length === 0) ? '' : labels.join(','),
           body: el.body,
           url: el.url
         })
       })
-
       page += 1
-      resp = await wepy.request({url: BaseURL + Github.Issues + page})
+      resp = await wepy.request({url: BaseURL + Github.Article + '&page=' + page})
     }
 
     return [issues, 0]
@@ -129,35 +120,20 @@ export async function listIssues () {
 export async function mine () {
   try {
     let resp = await wepy.request({url: BaseURL + Github.Mine})
+    let data = []
 
     if (resp.statusCode === 200) {
-      // 解析 json 数据
-      let userInfo = JSON.parse(resp.data.body).info
-
-      return userInfo
+      resp.data.map((item) => {
+        if (item.number === 1 || item.number === 2) {
+          data.unshift(item)
+        }
+      })
     }
 
-    return {}
+    return data
   } catch (e) {
     console.log(e)
 
-    return {}
-  }
-}
-
-// 获取 Github 上星数最多的项目
-export async function getPopular (language, page) {
-  try {
-    let resp = await wepy.request({url: BaseURL + Github.Popular + '&q=language:' + language + '&sort=stars&page=' + page})
-
-    if (resp.statusCode === 200) {
-      return [resp.data.items, 0]
-    }
-
-    return [[], 1]
-  } catch (e) {
-    console.log(e)
-
-    return [[], 1]
+    return []
   }
 }

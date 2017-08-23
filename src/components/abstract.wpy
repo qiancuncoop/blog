@@ -63,8 +63,6 @@
     </view>
     <view style="width: {{windowWidth - 38}}px;" class="itemBottom">
       <text class="subTitle">{{message.created}}</text>
-      <text class="subTitle separate">{{separate}}</text>
-      <text class="subTitle">{{message.labels}}</text>
     </view>
   </view>
 </template>
@@ -85,7 +83,7 @@
 
     methods = {
       tap() {
-        this.$emit('childFn')
+        this.$emit('childFunc')
       }
     }
   }
