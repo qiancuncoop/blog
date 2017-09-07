@@ -101,7 +101,6 @@
         WxParse.wxParse('data', 'md', body || option.body, self)
       } catch (e) {
       }
-
     }
 
     onShareAppMessage() {
