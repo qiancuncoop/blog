@@ -54,7 +54,7 @@
     <view class="topBorder"></view>
     <view class="page" wx:if="{{status === 0}}">
       <repeat for="{{message}}" key="index" index="index" item="item">
-        <abstract :message="item" :image="images[index]" :width="windowWidth" @childFunc.user="onShowDetail" />
+        <abstract :message="item" :image="images[index]" :type="type[index]" :width="windowWidth" @childFunc.user="onShowDetail" />
       </repeat>
     </view>
     <view
@@ -96,6 +96,7 @@
       windowHeight: 0,
       windowWidth: 0,
       message: [],
+      type: [],
       images: [],
       networkFail: '网络请求失败',
       tapToReload: '请轻触屏幕重新加载',
@@ -171,6 +172,7 @@
       self.windowHeight = windowSize.windowHeight
 
       self.images = (await mapIssues())[0]
+      self.type = (await mapIssues())[1]
       self.message = issues[0]
       self.status = issues[1]
 
@@ -197,8 +199,9 @@
 
         let data = await mapIssues()
 
-        if (lastUpdated !== data[1]) {
+        if (lastUpdated !== data[2]) {
           self.images = data[0]
+          self.type = data[1]
 
           wepy.showLoading({
             title: '正在加载...',
