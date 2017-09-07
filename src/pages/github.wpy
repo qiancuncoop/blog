@@ -225,6 +225,7 @@
 
       onShowDetail(e) {
         let self = this
+
         try {
           wepy.setStorageSync('body', self.popular[e.source.$index].body)
           wepy.setStorageSync('title', self.popular[e.source.$index].title)
@@ -279,6 +280,13 @@
       }
 
       this.$apply()
+    }
+
+    onShareAppMessage(res) {
+      return {
+        title: '便民信息',
+        path: '/pages/github'
+      }
     }
   }
 </script>

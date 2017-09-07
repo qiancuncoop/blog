@@ -28,7 +28,7 @@
  */
 
 <style lang="less">
-  @import '../libs/wemark/wemark.wxss';
+  @import "../libs/wxParse/wxParse.wxss";
   .content {
     padding: 1rem;
   }
@@ -37,16 +37,16 @@
 <template>
   <view>
     <view class="topBorder"></view>
-    <import src="../libs/wemark/wemark.wxml"/>
+    <import src="../libs/wxParse/wxParse.wxml"/>
     <view class="content">
-      <template is="wemark" data="{{...data}}"></template>
+      <template is="wxParse" data="{{wxParseData:data.nodes}}" style="width: {{windowWidth}}px;"></template>
     </view>
   </view>
 </template>
 
 <script>
   import wepy from 'wepy'
-  var weMark = require('../libs/wemark/wemark')
+  var WxParse = require('../libs/wxParse/wxParse.js')
 
   export default class Detail extends wepy.page {
     config = {
@@ -57,21 +57,23 @@
       windowWidth: 0,
       windowHeight: 0,
       body: null,
+      title: '',
       data: {}
     }
 
     methods = {
     }
 
-    onLoad() {
+    onLoad(option) {
       let self = this
 
       // 动态设置文章标题
       try {
         let title = wepy.getStorageSync('title')
+        self.title = wepy.getStorageSync('title')
 
         wepy.setNavigationBarTitle({
-          title: title
+          title: title || option.title
         })
       } catch (e) {
       }
@@ -94,11 +96,20 @@
       // 获取文章内容
       try {
         let body = wepy.getStorageSync('body')
+        self.body = wepy.getStorageSync('body')
 
-        weMark.parse(body, self, {
-          name: 'data'
-        })
+        WxParse.wxParse('data', 'md', body || option.body, self)
       } catch (e) {
+      }
+
+    }
+
+    onShareAppMessage() {
+      let self = this
+
+      return {
+        title: self.title,
+        path: '/pages/detail?body=' + self.body + '&title=' + self.title
       }
     }
   }

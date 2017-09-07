@@ -223,5 +223,12 @@
 
       this.$apply()
     }
+
+    onShareAppMessage(res) {
+      return {
+        title: '高阳农在指间',
+        path: '/pages/index'
+      }
+    }
   }
 </script>
