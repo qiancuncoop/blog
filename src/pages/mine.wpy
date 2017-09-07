@@ -87,7 +87,7 @@
     data = {
       windowWidth: 0,
       windowHeight: 0,
-      label: ['公司简介', '团队介绍'],
+      label: ['我要发布', '关于我们'],
       data: []
     }
 

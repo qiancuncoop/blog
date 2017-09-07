@@ -29,11 +29,14 @@
 
 <style lang="less">
   .item {
-    margin: 19px;
+    margin: 19px 0;
     padding-bottom: 1rem;
   }
   .itemBottom {
-    margin-top: 0.4rem;
+    margin: 0.4rem 19px 0 19px;
+  }
+  .itemTime {
+    margin-top: 0.2rem;
   }
   .title {
     font-weight: bolder;
@@ -57,19 +60,21 @@
       wx:if="{{type === 'image'}}"
       src="{{image}}"
       class="image"
-      style="width: {{width - 38}}px; height: {{(width - 38) / 14.4 * 9}}px;">
+      style="width: {{width}}px; height: {{width / 14.4 * 9}}px;">
     </image>
     <video
       wx:else
       src="{{image}}"
       controls
-      style="width: {{width - 38}}px; height: {{(width - 38) / 14.4 * 9}}px;">
+      style="width: {{width}}px; height: {{width / 14.4 * 9}}px;">
     </video>
-    <view style="width: {{windowWidth - 38}}px;" class="itemBottom">
-      <text class="title">{{message.title}}</text>
-    </view>
-    <view style="width: {{windowWidth - 38}}px;" class="itemBottom">
-      <text class="subTitle">{{message.created}}</text>
+    <view class="itemBottom">
+      <view style="width: {{windowWidth - 38}}px;">
+        <text class="title">{{message.title}}</text>
+      </view>
+      <view style="width: {{windowWidth - 38}}px;" class="time">
+        <text class="subTitle">{{message.created}}</text>
+      </view>
     </view>
   </view>
 </template>
