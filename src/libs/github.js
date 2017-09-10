@@ -108,7 +108,7 @@ export async function listIssues (tab) {
         })
       })
       page += 1
-      resp = await wepy.request({url: BaseURL + Github.Article + '&page=' + page})
+      resp = await wepy.request({url: BaseURL + Github.Article + '&labels=' + tab + '&page=' + page})
     }
 
     return [issues, 0]

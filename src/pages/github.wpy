@@ -207,6 +207,11 @@
         self.popular = data[0]
         self.status = data[1]
 
+        self.setData({
+          popular: data[0],
+          status: data[1]
+        })
+
         // 加载成功直接显示，失败则提示用户
         if (self.status === 0) {
           await wepy.hideLoading()
@@ -266,6 +271,11 @@
 
       self.popular = data[0]
       self.status = data[1]
+
+      self.setData({
+        popular: data[0],
+        status: data[1]
+      })
 
       if (self.status === 0) {
         await wepy.hideLoading()
